@@ -7,6 +7,9 @@ import {
   } from '@heroicons/react/24/outline'
 import { useUser, UserButton } from "@clerk/clerk-react";
 
+type LayoutProps = {
+  children: React.ReactNode;
+};
 
 const teams = [
     { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
@@ -18,7 +21,7 @@ function classNames(...classes: Array<string | boolean | undefined>) {
     return classes.filter(Boolean).join(' ')
 }
 
-export default function Layout({ children }) {
+export default function Layout({ children }: LayoutProps) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const  user  = useUser();
 
