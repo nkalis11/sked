@@ -1,12 +1,10 @@
 import {
-    Bars3Icon,
     CalendarIcon,
     ChartPieIcon,
     DocumentDuplicateIcon,
     FolderIcon,
     HomeIcon,
     UsersIcon,
-    XMarkIcon,
   } from '@heroicons/react/24/outline'
 
 const pageLinks = [
