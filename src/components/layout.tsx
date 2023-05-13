@@ -142,11 +142,7 @@ export default function Layout({ children }: LayoutProps) {
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-600 px-6">
             <div className="flex h-16 shrink-0 items-center">
-              <img
-                className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=white"
-                alt="Your Company"
-              />
+              <UserButton />
             </div>
             <nav className="flex flex-1 flex-col">
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -220,12 +216,7 @@ export default function Layout({ children }: LayoutProps) {
           </button>
           <div className="flex-1 text-sm font-semibold leading-6 text-white">Dashboard</div>
           <a href="#">
-            <span className="sr-only">Your profile</span>
-            <img
-              className="h-8 w-8 rounded-full bg-indigo-700"
-              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-              alt=""
-            />
+              <UserButton />
           </a>
         </div>
 
