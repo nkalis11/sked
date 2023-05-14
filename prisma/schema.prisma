@@ -16,8 +16,15 @@ model Example {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
+model Clerk {
+  id        String           @id @default(cuid())
+  name      String
+  email     String           @unique
+}
+
 model MaintenanceCard {
   id                   String              @id @default(cuid())
+  Description          String
   manHours             Decimal
   System               String
   Subsystem            String
@@ -27,6 +34,11 @@ model MaintenanceCard {
   Periodicity          PeriodicityCalendar
 }
 
+model ClerkCard {
+  id            String           @id @default(cuid())
+  clerkId       String
+  maintenanceId String
+}
 model MaintenanceIndex {
   id                 Int                 @id @default(autoincrement())
   manHours           Decimal

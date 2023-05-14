@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
 import { useUser } from "@clerk/clerk-react";
 import { Grid, Col, Card, Text, Metric } from "@tremor/react"
-
+import Schedule from "~/components/Dashboard/schedule";
 import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
@@ -41,6 +41,7 @@ const Home: NextPage = () => {
               </Card>
             </Col>
           </Grid>
+          <Schedule />
         </div>
       </main>
     </div>
