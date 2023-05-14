@@ -32,6 +32,9 @@ model MaintenanceCard {
   periodicityFrequency Int
   periodicityCode      Int
   Periodicity          PeriodicityCalendar
+  assigneeId           String
+
+  @@index([assigneeId])
 }
 
 model ClerkCard {
