@@ -9,13 +9,17 @@ export default function Schedule( ) {
     const maintenanceCards = cardsQuery.data || [];
     const clerks = clerksQuery.data || [];
 
+    const [openDropdownCardId, setOpenDropdownCardId] = useState<string | null>(null);
+
     const handleAssignClerk = (maintenanceCardId: string, clerkId: string) => {
       // Handle assigning the clerk to the maintenance card
       // You can call an API endpoint or perform any necessary logic here
       console.log("Assigning clerk", clerkId, "to maintenance card", maintenanceCardId);
     };
+    const toggleDropdown = (maintenanceCardId: string) => {
+      setOpenDropdownCardId((prevCardId: string | null) => (prevCardId === maintenanceCardId ? null : maintenanceCardId));
+    };
     
-
     return (
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="sm:flex sm:items-center">
@@ -76,6 +80,7 @@ export default function Schedule( ) {
                               id={`assign-clerk-${card.id}-button`}
                               aria-expanded="false"
                               aria-haspopup="true"
+                              onClick={() => toggleDropdown(card.id)}
                             >
                               Assign Clerk
                               <svg
@@ -92,7 +97,28 @@ export default function Schedule( ) {
                                 />
                               </svg>
                             </button>
-                          </div>
+                            {openDropdownCardId === card.id && (
+                              <div
+                              className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+                              role="menu"
+                              aria-orientation="vertical"
+                              aria-labelledby={`assign-clerk-${card.id}-button`}
+                              >
+                                <div className="py-1" role="none">
+                                  {clerks.map((clerk) => (
+                                  <button
+                                    key={clerk.id}
+                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                                    role="menuitem"
+                                    onClick={() => handleAssignClerk(card.id, clerk.id)}
+                                  >
+                                    {clerk.name}
+                                  </button>
+                                ))}
+                                </div>
+                              </div>
+                          )}
+                           </div>
                           {/* Dropdown content */}
                           <div
                             className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
