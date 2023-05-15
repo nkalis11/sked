@@ -1,5 +1,4 @@
 import { SignIn } from "@clerk/nextjs";
-import SignInForm from "~/components/Forms/signInForm";
 
 const SignInPage = () => {
     return (

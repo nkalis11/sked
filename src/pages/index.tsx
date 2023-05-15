@@ -1,14 +1,9 @@
 import { type NextPage } from "next";
 import { useUser } from "@clerk/clerk-react";
-import { Grid, Col, Card, Text, Metric } from "@tremor/react"
-import Testing from "~/components/Dashboard/testing";
 import { api } from "~/utils/api";
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 
 const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
-
-  const user = useUser();
 
   return (
     <>
@@ -41,7 +36,7 @@ const Home: NextPage = () => {
           <div className="mt-24 sm:mt-32 lg:mt-16">
             <a href="#" className="inline-flex space-x-6">
               <span className="rounded-full bg-indigo-600/10 px-3 py-1 text-sm font-semibold leading-6 text-indigo-600 ring-1 ring-inset ring-indigo-600/10">
-                What's new
+                New
               </span>
               <span className="inline-flex items-center space-x-2 text-sm font-medium leading-6 text-gray-600">
                 <span>Just shipped v1.0</span>
