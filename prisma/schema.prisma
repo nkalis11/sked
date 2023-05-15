@@ -30,7 +30,7 @@ model MaintenanceCard {
   System               String
   Subsystem            String
   Equipment            String
-  periodicityFrequency Int
+  periodicityFrequency Int?               
   periodicityCode      Int
   Periodicity          PeriodicityCalendar
   assigneeId           String
@@ -51,12 +51,12 @@ model MaintenanceIndex {
 }
 
 enum PeriodicityCalendar {
-  Daily
-  Weekly
-  Monthly
-  Quarterly
-  Semiannually
-  Annually
+  D
+  W
+  M
+  Q
+  S
+  A
 }
 
 
