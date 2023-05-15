@@ -40,8 +40,13 @@ const Home: NextPage = () => {
                 <Metric>KPI 5</Metric>
               </Card>
             </Col>
+            <Col numColSpan={1} numColSpanLg={3}>
+              <Card>
+                <Testing />
+              </Card>
+            </Col>
           </Grid>
-          <Testing />
+          
         </div>
       </main>
     </div>

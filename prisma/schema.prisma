@@ -24,6 +24,7 @@ model Clerk {
 
 model MaintenanceCard {
   id                   String              @id @default(cuid())
+  Title                String
   Description          String
   manHours             Decimal
   System               String
