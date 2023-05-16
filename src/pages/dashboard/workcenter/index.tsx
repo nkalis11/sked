@@ -4,11 +4,14 @@ import { useOrganizationList } from "@clerk/nextjs";
 import Link from "next/link";
 import { useState } from "react";
 import { OrganizationMembership } from "@clerk/nextjs/server";
+import InviteMember from "~/components/Forms/InviteMember";
 
 interface Organization {
     id: string;
     name: string;
+    membersCount: number;
 }
+
 const Workcenter: NextPage = () => { 
     const { organizationList } = useOrganizationList();
     const [selectedOrg, setSelectedOrg] = useState<{ organization: Organization } | null>(null);
@@ -17,8 +20,8 @@ const Workcenter: NextPage = () => {
     if (!organizationList) {
         return null;
     }
-    const handleViewWorkcenterClick = (org) => {
-        setSelectedOrg(org);
+    const handleViewWorkcenterClick = (org: Organization) => {
+        setSelectedOrg({ organization: org});
     }
     const closeWorkcenterView = () => {
         setSelectedOrg(null);
@@ -61,11 +64,14 @@ const Workcenter: NextPage = () => {
             <div id="workcenter-view">
                 {selectedOrg && (
                     <div>
-                        <h2>{selectedOrg.name}</h2>
-                        <p>{selectedOrg.membersCount}</p>
+                        <h2>{selectedOrg.organization.name}</h2>
+                        <p>{selectedOrg.organization.membersCount}</p>
                         <button onClick={closeWorkcenterView}>Close</button>
                     </div>
                 )}             
+            </div>
+            <div>
+                <InviteMember />
             </div>
         </DashboardLayout>
     )
