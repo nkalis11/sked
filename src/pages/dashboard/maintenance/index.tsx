@@ -4,11 +4,9 @@ import { Grid, Col, Card, Text, Metric } from "@tremor/react"
 import Testing from "~/components/Dashboard/testing";
 import { api } from "~/utils/api";
 import DashboardLayout from "~/components/Layouts/DashboardLayout";
+import InviteMember from "~/components/Forms/InviteMember";
 
 const Dashboard: NextPage = () => {
-    const hello = api.example.hello.useQuery({ text: "from tRPC" });
-
-    const user = useUser();
 
     return (
          <DashboardLayout>
@@ -21,8 +19,7 @@ const Dashboard: NextPage = () => {
           <Grid numCols={1} numColsSm={2} numColsLg={3} className="gap-4">
             <Col numColSpan={1} numColSpanLg={2}>
               <Card>
-                <Text>Title</Text>
-                <Metric>KPI 1</Metric>
+                <InviteMember />
               </Card>
             </Col>
             <Card>
