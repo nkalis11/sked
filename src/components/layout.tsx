@@ -1,6 +1,7 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import pageLinks from "./Navigation/usePageLinks";
+import { usePageLinks } from "./Navigation/usePageLinks";
+
 import {
     Bars3Icon,
     XMarkIcon
@@ -24,6 +25,7 @@ function classNames(...classes: Array<string | boolean | undefined>) {
 export default function Layout({ children }: LayoutProps) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const  user  = useUser();
+     const pageLinks = usePageLinks();
 
     return (
         <>
