@@ -1,6 +1,6 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import pageLinks from "./Navigation/pagelinks";
+import pageLinks from "./Navigation/usePageLinks";
 import {
     Bars3Icon,
     XMarkIcon

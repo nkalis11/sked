@@ -1,6 +1,6 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import  pageLinks  from "~/components/Navigation/pagelinks";
+import { usePageLinks } from "../Navigation/usePageLinks";
 import {
     Bars3Icon,
     XMarkIcon
@@ -24,6 +24,7 @@ function classNames(...classes: Array<string | boolean | undefined>) {
 export default function DashboardLayout({ children }: LayoutProps) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const  user  = useUser();
+    const pageLinks = usePageLinks();
 
     return (
         <>
@@ -220,7 +221,7 @@ export default function DashboardLayout({ children }: LayoutProps) {
           </a>
         </div>
 
-        <main className="py-10 lg:pl-72">
+        <main className="py-10 lg:pl-72 bg-slate-50 h-screen">
           <div className="px-4 sm:px-6 lg:px-8">{children}</div>
         </main>
       </div>
