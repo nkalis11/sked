@@ -33,11 +33,18 @@ model MaintenanceCard {
   periodicityFrequency Int?               
   periodicityCode      Int
   Periodicity          PeriodicityCalendar
-  assigneeId           String
+  assigneeId           String?
 
   @@index([assigneeId])
 }
-
+enum PeriodicityCalendar {
+  D
+  W
+  M
+  Q
+  S
+  A
+}
 model ClerkCard {
   id            String           @id @default(cuid())
   clerkId       String
@@ -50,14 +57,7 @@ model MaintenanceIndex {
   mipCode            String
 }
 
-enum PeriodicityCalendar {
-  D
-  W
-  M
-  Q
-  S
-  A
-}
+
 
 
 

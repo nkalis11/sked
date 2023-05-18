@@ -8,6 +8,8 @@ import { clerkClient } from "@clerk/nextjs/server";
 import { useMutation } from "@tanstack/react-query";
 import { List } from "@tremor/react";
 import MaintModal from "../Modals/maintModal";
+import AddMaintModal from "../Modals/addMaintModal";
+import { PlusIcon } from "@heroicons/react/20/solid";
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
@@ -20,15 +22,23 @@ export default function Testing() {
     const [maintenanceCards, setMaintenanceCards] = useState<MaintenanceCard[]>([]);
     const [selectedCard, setSelectedCard] = useState<MaintenanceCard | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isAddMaintModalOpen, setIsAddMaintModalOpen] = useState(false);
 
-      const handleCardClick = (card: MaintenanceCard, event: React.MouseEvent) => {
-        const target = event.target as HTMLElement;
-        const isCardTitleCell = target.classList.contains('card-title-cell');
+    const openAddMaintModal = () => {
+      setIsAddMaintModalOpen(true);
+    };
+    const closeAddMaintModal = () => {
+      setIsAddMaintModalOpen(false);
+    };
+
+    const handleCardClick = (card: MaintenanceCard, event: React.MouseEvent) => {
+      const target = event.target as HTMLElement;
+      const isCardTitleCell = target.classList.contains('card-title-cell');
       
-        if (isCardTitleCell) {
-          setSelectedCard(card);
-          setIsModalOpen(true);  // <-- Set the modal to open
-        }
+      if (isCardTitleCell) {
+        setSelectedCard(card);
+        setIsModalOpen(true);  // <-- Set the modal to open
+      }
     };
 
     const closeModal = () => {
@@ -78,6 +88,14 @@ export default function Testing() {
                     <p className="mt-2 text-sm text-gray-700">
                         A list of all current maintenance cards.
                     </p>
+                    <button 
+                      onClick={openAddMaintModal}
+                      type="button"
+                      className="inline-flex items-center gap-x-1.5 rounded-md bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500"
+                      >
+                        <PlusIcon className="-ml-0.5 h-5 w-5" aria-hidden="true" />
+                      Add Maintenance Card
+                    </button>
                 </div>
             </div>
             {/* Card Table */}
@@ -167,6 +185,10 @@ export default function Testing() {
                          {selectedCard && (
                             <MaintModal card={selectedCard} onClose={closeModal} open={isModalOpen} />
                             )}
+
+                          {isAddMaintModalOpen && (
+                              <AddMaintModal onFormSubmitted={closeAddMaintModal} />
+                          )}
                     </div>
                 </div>
             </div>
