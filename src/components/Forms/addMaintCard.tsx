@@ -70,8 +70,8 @@ export default function AddMaintCard({ onFormSubmitted }: AddMaintCardProps) {
                     className="lg:grid lg:grid-cols-1 lg:gap-x-12 xl:gap-x-16" 
                     onSubmit={onSubmit}
                 >
-                    <div className="bg-black"> 
-                        <div className="bg-lime-200">
+                    <div className=""> 
+                        <div className="">
                             <h2 className="text-lg font-medium text-gray-900">Detailed Information</h2>
                             <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
                                 <div> 
@@ -91,7 +91,7 @@ export default function AddMaintCard({ onFormSubmitted }: AddMaintCardProps) {
                                     <label className="block text-sm font-medium text-gray-700">
                                         Description
                                     </label>
-                                    <div className="mt-1">
+                                    <div className="relative mt-1 rounded-md shadow-sm">
                                         <input
                                             type="text"
                                             value={description}
@@ -104,7 +104,7 @@ export default function AddMaintCard({ onFormSubmitted }: AddMaintCardProps) {
                                     <label className="block text-sm font-medium text-gray-700">
                                         Man Hours
                                     </label>
-                                    <div className="relative mt-2 rounded-md shadow-sm">
+                                    <div className="relative mt-1 rounded-md shadow-sm">
                                         <input
                                             type="number"
                                             step={0.1}
@@ -114,15 +114,11 @@ export default function AddMaintCard({ onFormSubmitted }: AddMaintCardProps) {
                                             placeholder="1.5"
                                             aria-describedby="man-hours-error"
                                             onChange={(e) => setManHours(e.target.value)}
-                                            className="block w-full rounded-md border-0 py-1.5 pr-10 text-red-900 ring-1 ring-inset ring-red-300 placeholder:text-red-300 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6"
+                                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                         />
-                                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                                            <ExclamationCircleIcon className="h-5 w-5 text-red-500" aria-hidden="true" />
-                                        </div>
+                                        
                                     </div>
-                                    <p className="mt-2 text-sm text-red-600" id="man-hours-error">
-                                        Not a valid email address.
-                                    </p>
+                                 
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700">
@@ -207,19 +203,7 @@ export default function AddMaintCard({ onFormSubmitted }: AddMaintCardProps) {
                                         </select>
                                     </div>
                                 </div>
-                                <div> {/* This should be a dropdown*/}
-                                    <label className="block text-sm font-medium text-gray-700">
-                                        Assignee
-                                    </label>
-                                    <div className="mt-1">
-                                        <input
-                                            type="text"
-                                            value={assigneeId}
-                                            onChange={(e) => setAssigneeId(e.target.value)}
-                                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                        />
-                                    </div>
-                                </div>
+                           
                                 
                                 
                             </div>

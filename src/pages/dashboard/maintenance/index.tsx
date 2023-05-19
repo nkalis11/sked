@@ -68,7 +68,7 @@ const Dashboard: NextPage = () => {
               </Grid>
               <div className="mt-6">
                 <Card>
-                  <div className="h-96">
+                  <div className="h-full">
                     <Testing />
                   </div>
                 </Card>

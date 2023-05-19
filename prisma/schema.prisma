@@ -11,16 +11,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
-model Clerk {
-  id        String           @id @default(cuid())
-  name      String
-  email     String           @unique
-}
 
 model MaintenanceCard {
   id                   String              @id @default(cuid())
@@ -37,6 +27,22 @@ model MaintenanceCard {
 
   @@index([assigneeId])
 }
+model System {
+  id                 String              @id @default(cuid())
+  name               SystemName
+}
+
+enum SystemName {
+  Air
+  Ballast
+  Trim
+  Navigation
+  Communication
+  Propulsion
+  Steering
+  Electrical
+}
+
 enum PeriodicityCalendar {
   D
   W
@@ -45,16 +51,20 @@ enum PeriodicityCalendar {
   S
   A
 }
-model ClerkCard {
-  id            String           @id @default(cuid())
-  clerkId       String
-  maintenanceId String
-}
+
 model MaintenanceIndex {
   id                 Int                 @id @default(autoincrement())
-  manHours           Decimal
-  System             String
+  SystemId           String
   mipCode            String
+
+  @@index([SystemId])
+}
+
+model AccomplishmentRating {
+  id                 Int                 @id @default(autoincrement())
+  situationalRating  Float
+  periodicRating     Float
+  administrativeRating Float
 }
 
 
