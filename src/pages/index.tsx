@@ -1,9 +1,8 @@
 import { type NextPage } from "next";
-import { useUser } from "@clerk/clerk-react";
-import { api } from "~/utils/api";
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 
 const Home: NextPage = () => {
+ 
 
   return (
     <>
