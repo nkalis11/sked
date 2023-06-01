@@ -4,6 +4,7 @@ import { useOrganization, useOrganizationList } from "@clerk/nextjs";
 import { useState } from "react";
 
 
+
 interface Organization {
     id: string;
     name: string;
@@ -94,10 +95,11 @@ const Workcenter: NextPage = () => {
                             </div>
                             <button className="rounded-md bg-indigo-50 px-2.5 py-1.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100" onClick={closeWorkcenterView}>Close</button>
                         </div>
-                        
                     </div>
+                    
                 )}             
             </div>
+
         </DashboardLayout>
     )
 };

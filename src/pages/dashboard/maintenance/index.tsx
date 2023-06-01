@@ -1,8 +1,9 @@
 import { type NextPage } from "next";
 import { useUser } from "@clerk/clerk-react";
-import { Grid, Card, Text, Metric, Title, Color, CategoryBar, Legend } from "@tremor/react"
+import { Grid, Card, Text, Metric, Title, Color, CategoryBar, Legend, Col } from "@tremor/react"
 import Testing from "~/components/Dashboard/testing";
 import { api } from "~/utils/api";
+import Test from "~/components/Testing/test";
 import DashboardLayout from "~/components/Layouts/DashboardLayout";
 import InviteMember from "~/components/Forms/InviteMember";
 
@@ -67,11 +68,20 @@ const Dashboard: NextPage = () => {
                 
               </Grid>
               <div className="mt-6">
+              <Col>
+                <Card>
+                  <div className="h-full">
+                    <Test />
+                  </div>
+                </Card>
+                </Col>
+                <Col>
                 <Card>
                   <div className="h-full">
                     <Testing />
                   </div>
                 </Card>
+                </Col>
               </div>
             </div>
           </main>

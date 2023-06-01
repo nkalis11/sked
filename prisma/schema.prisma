@@ -24,6 +24,8 @@ model MaintenanceCard {
   periodicityCode      Int
   Periodicity          PeriodicityCalendar
   assigneeId           String?
+  dueDate              DateTime?
+  lastCompletedDate    DateTime?
 
   @@index([assigneeId])
 }

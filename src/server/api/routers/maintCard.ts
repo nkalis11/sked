@@ -2,16 +2,16 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { MaintenanceCard, PrismaClient, Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
-import { clerkClient } from "@clerk/nextjs/server";
+import { clerkClient } from "@clerk/nextjs";
 import { filterUserForClient } from "../helpers/filterUserForClient";
 
 const prisma = new PrismaClient();
-
+{/* Assigns Clerk User To Maintenance Card*/}
 const addUserDataToMaint = async (maintCard: MaintenanceCard[]) => {
   const userId = maintCard
     .map((card) => card.assigneeId)
     .filter((id): id is string => id !== null && id !== undefined);
-
+  //Pulls userlist from Clerk
   const users = (
     await clerkClient.users.getUserList({
       userId: userId,
@@ -47,11 +47,12 @@ const addUserDataToMaint = async (maintCard: MaintenanceCard[]) => {
   });
 };
 
+{/* Router for Maintenace Cards*/}
 export const maintCardRouter = createTRPCRouter({
-  getAll: publicProcedure.query(async ({ ctx }) => { //Router for getting all maintenance cards from Prisma
+  getAll: publicProcedure.query(async ({ ctx }) => { //Finds all maintenance cards in Prisma
     return await ctx.prisma.maintenanceCard.findMany();
   }),
-  getAllUsers: publicProcedure.query(async () => {  //Router for getting all users from Clerk
+  getAllUsers: publicProcedure.query(async () => {  //Gets all users from Clerk
     const users = await clerkClient.users.getUserList({
       limit: 110,
     });
@@ -88,6 +89,16 @@ export const maintCardRouter = createTRPCRouter({
       });
       return newCard;
     }),
+  removeMaintCard: publicProcedure //Router for removing a maintenance card from Prisma
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const deletedCard = await ctx.prisma.maintenanceCard.delete({
+        where: { id: input.id },
+      });
+      if (!deletedCard)
+        throw new TRPCError({ code: "NOT_FOUND", message: "Card not found" });
+      return deletedCard;
+    }),
   updateAssignee: publicProcedure //Router for updating the assignee of a maintenance card in Prisma
     .input(z.object({ cardId: z.string(), userId: z.string() }))
     .mutation(async ({ input, ctx}) => {
@@ -111,6 +122,29 @@ export const maintCardRouter = createTRPCRouter({
 
       return (await addUserDataToMaint([maintCard]))[0];
     }),
+    getByWeek: publicProcedure //Router for getting all maintenance cards for a week from Prisma
+    .input(z.object({ startDate: z.string() }))
+    .query(async ({ input, ctx }) => {
+      console.log('getByWeek input:', input);
+      const startDate = new Date(input.startDate);
+      const endDate = new Date(startDate);
+      endDate.setDate(endDate.getDate() + 7);
+
+      const cards = await ctx.prisma.maintenanceCard.findMany({
+        where: {
+          dueDate: {
+            gte: startDate,
+            lt: endDate,
+          },
+        },
+        orderBy: {
+          dueDate: "desc",
+        },
+      });
+      console.log('getByWeek result:', cards); // print the result
+
+      return cards;
+    }),
   getMaintByUserId: publicProcedure //Router for getting all maintenance cards assigned to a user from Prisma
     .input(
       z.object({
@@ -127,5 +161,4 @@ export const maintCardRouter = createTRPCRouter({
         })
         .then(addUserDataToMaint)
     ),
-
-});
+});  

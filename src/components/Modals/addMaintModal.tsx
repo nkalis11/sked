@@ -9,8 +9,11 @@ type AddMaintModalProps = {
 export default function AddMaintModal({ onFormSubmitted }: AddMaintModalProps) {
     const [isOpen, setIsOpen] = useState(true);
 
-    const close = () => setIsOpen(false); 
-
+    const close = () => {
+      setIsOpen(false); 
+      window.location.reload();
+    }
+  
     return (
         <Transition.Root show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={onFormSubmitted}>

@@ -1,6 +1,8 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { MaintenanceCard } from "@prisma/client";
+import DeleteCardButton from "../Buttons/deleteCard";
+import { set } from "zod";
 
 type MaintModalProps = {
     card: MaintenanceCard;
@@ -11,6 +13,12 @@ type MaintModalProps = {
 export default function MaintModal({ card, onClose, open }: MaintModalProps) {
     const closeModal = () => {
         onClose(); // Call the onClose function passed from the parent component
+    };
+    const [isDeleted, setIsDeleted] = useState(false); 
+    const handleDeleteSuccess = () => {
+      setIsDeleted(true);
+      closeModal();
+      window.location.reload();
     };
 
     return (
@@ -61,6 +69,7 @@ export default function MaintModal({ card, onClose, open }: MaintModalProps) {
                     >
                       Go back to dashboard
                     </button>
+                    <DeleteCardButton cardId={card.id} onSuccess={handleDeleteSuccess} />
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

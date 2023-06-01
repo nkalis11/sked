@@ -11,6 +11,7 @@ export const usePageLinks = () => {
     return [
         { name: 'Maintenance', href: '/dashboard/maintenance', icon: ClipboardIcon },
         { name: 'Workcenters', href: '/dashboard/workcenter', icon: UsersIcon },
+        { name: 'Testing', href: '/dashboard/testing', icon: UsersIcon}
         
     ].map(link => ({
         ...link,

@@ -1,12 +1,9 @@
-import { MaintenanceCard, PrismaClient } from "@prisma/client";
-import { useEffect, useState, Fragment } from "react";
+import { MaintenanceCard } from "@prisma/client";
+import { useEffect, useState } from "react";
 import { Listbox, Transition } from '@headlessui/react'
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
+import { ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { api } from "~/utils/api";
 import React from "react";
-import { clerkClient } from "@clerk/nextjs/server";
-import { useMutation } from "@tanstack/react-query";
-import { List } from "@tremor/react";
 import MaintModal from "../Modals/maintModal";
 import AddMaintModal from "../Modals/addMaintModal";
 import { PlusIcon } from "@heroicons/react/20/solid";
