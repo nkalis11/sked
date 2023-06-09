@@ -1,41 +1,9 @@
 import { type NextPage } from "next";
-import { useUser } from "@clerk/clerk-react";
-import { Grid, Card, Text, Metric, Title, Color, CategoryBar, Legend, Col } from "@tremor/react"
-import Testing from "~/components/Dashboard/testing";
-import { api } from "~/utils/api";
-import Test from "~/components/Testing/test";
+import { Grid, Card, Col } from "@tremor/react"
 import DashboardLayout from "~/components/Layouts/DashboardLayout";
-import InviteMember from "~/components/Forms/InviteMember";
-
-const categories: {
-  title: string;
-  metric: string;
-  subCategoryPercentageValues: number[];
-  subCategroyColors: Color[];
-  subCategoryTitles: string[];
-}[] = [
-  {
-    title: "Periodic Accomplishment Rating",
-    metric: "30%",
-    subCategoryPercentageValues: [30, 70],
-    subCategroyColors: ["emerald", "red"],
-    subCategoryTitles: ["Completed", "Incomplete"],
-  },
-  {
-    title: "Administrative Accomplishment Rating",
-    metric: "50%",
-    subCategoryPercentageValues: [50, 50],
-    subCategroyColors: ["indigo", "purple"],
-    subCategoryTitles: ["Completed", "Incomplete"],
-  },
-  {
-    title: "Spot Check Acomplishment Rating",
-    metric: "40%",
-    subCategoryPercentageValues: [40, 60],
-    subCategroyColors: ["emerald", "rose"],
-    subCategoryTitles: ["Completed", "Incomplete"],
-  },
-];
+import UserMaintenance from "~/components/Tables/UserMaintenance";
+import PerRating from "~/components/Cards/perRating";
+import UserHeading from "~/components/Dashboard/userHeading";
 
 const Dashboard: NextPage = () => {
 
@@ -43,47 +11,27 @@ const Dashboard: NextPage = () => {
       <DashboardLayout>
         <div className="min-h-full">
           <header>
-              <Title className="md:text-4xl text-3xl font-bold">Maintenance Dashboard</Title>
-              <Text className="md:text-lg">Lorem ipsum dolor sit amet, consetetur sadipscing elitr.</Text>
-            </header>
-          <main className="">
-            <div className="">
-              <Grid numColsMd={2} numColsLg={3} className="gap-6 mt-6">
-                {categories.map((item) => (
-                  <Card key={item.title}>
-                    <Text>{item.title}</Text>
-                    <Metric>{item.metric}</Metric>
-                    <CategoryBar
-                      categoryPercentageValues={item.subCategoryPercentageValues}
-                      colors={item.subCategroyColors}
-                      className="mt-4"
-                    />
-                    <Legend
-                      categories={item.subCategoryTitles}
-                      colors={item.subCategroyColors}
-                      className="mt-4"
-                    />
-                  </Card>
-                ))}
-                
-              </Grid>
-              <div className="mt-6">
-              <Col>
+            <UserHeading />
+          </header>
+          <main>
+              <Col className="my-4">
                 <Card>
                   <div className="h-full">
-                    <Test />
+                    <UserMaintenance />
                   </div>
                 </Card>
+              </Col>
+              <Grid numCols={1} numColsSm={2} numColsLg={3} className="gap-4">
+                <Col>
+                  <PerRating /> 
                 </Col>
                 <Col>
-                <Card>
-                  <div className="h-full">
-                    <Testing />
-                  </div>
-                </Card>
+                  <PerRating /> 
                 </Col>
-              </div>
-            </div>
+                <Col>
+                  <PerRating /> 
+                </Col>
+              </Grid>
           </main>
         </div>
     </DashboardLayout>

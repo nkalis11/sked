@@ -1,23 +1,26 @@
 import React, { useState } from "react"
-import { MaintenanceCard } from "@prisma/client";
 import { api } from "~/utils/api"
 import WeekDropdown from "../Buttons/weekDropdown";
 import AssigneeButton from "../Buttons/updateAssignee";
+import { Card } from "@tremor/react";
 
-const getCurrentWeek = (): string => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = (today.getMonth() + 1).toString().padStart(2, '0');
-    const day = today.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  };
 
 const useMaintenanceTable = () => {
-    const [selectedWeek, setSelectedWeek] = useState<string>(getCurrentWeek());
+    const [selectedWeek, setSelectedWeek] = useState<string>(() => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = (today.getMonth() + 1).toString().padStart(2, '0');
+        const day = today.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    });
     const { data, error, isLoading } = api.maintenanceCard.getByWeek.useQuery({ startDate: selectedWeek });
 
+    const today = new Date();
+    const currentQuarter = Math.floor((today.getMonth() / 3));
+    const quarterStartMonth = currentQuarter * 3;
+    const quarterStartDate = new Date(today.getFullYear(), quarterStartMonth, 1);
     const weekOptions = [...Array(13).keys()].map((num) => {
-        const date = new Date();
+        const date = new Date(quarterStartDate);
         date.setDate(date.getDate() + (num * 7));
         const value = date.toISOString().split('T')[0] || '';
         return {
@@ -29,15 +32,14 @@ const useMaintenanceTable = () => {
     return { selectedWeek, setSelectedWeek, weekOptions, data, error, isLoading };
 };
 
-export default function Test() {
-    const { selectedWeek, setSelectedWeek, weekOptions, data, error, isLoading } = useMaintenanceTable();
-    const [maintenanceCards, setMaintenanceCards] = useState<MaintenanceCard[]>([]);
+export default function WeeklyMaintenance() {
+    const { selectedWeek, setSelectedWeek, weekOptions, data, error } = useMaintenanceTable();
 
     
     if (error) return <div>Error: {error.message}</div>;
 
     return (
-    <>
+    <Card>
         <div className="px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:items-center">
                 <div className="sm:flex-auto">
@@ -61,7 +63,7 @@ export default function Test() {
                                     <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3">
                                         Title
                                     </th>
-                                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                    <th scope="col" className="hidden lg:table-cell px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                         Description
                                     </th>
                                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
@@ -76,7 +78,7 @@ export default function Test() {
                                 {Array.isArray(data) && data.map((card) => (
                                       <tr key={card.id} className="even:bg-gray-50">
                                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{card.Title}</td>
-                                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{card.Description}</td>
+                                      <td className="hidden lg:table-cell whitespace-nowrap px-3 py-4 text-sm text-gray-500">{card.Description}</td>
                                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{card.dueDate ? card.dueDate.toISOString().split('T')[0] : 'No due date'}</td>
                                       <td>
                                         <AssigneeButton card={card} />
@@ -89,6 +91,6 @@ export default function Test() {
                 </div>
             </div>
         </div>
-        </>
+    </Card>
     )
 }

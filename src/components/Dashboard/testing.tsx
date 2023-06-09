@@ -116,7 +116,7 @@ export default function Testing() {
                                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3 card-title-cell hover:text-blue-700 cursor-pointer" onClick={(event) => handleCardClick(card, event)}>{card.Title}</td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{card.System}</td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{card.Subsystem}</td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{card.Equipment}</td>
+                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{card.dueDate ? card.dueDate.toISOString().split('T')[0] : 'No due date'}</td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                             { 
                                                 (() => {

@@ -6,7 +6,13 @@ export default {
     "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}", // Tremor module
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'mono': ['Oswald'],
+        'sans': ['Roboto', 'sans-serif'],
+      },
+    },
+ 
   },
   plugins: [],
 } satisfies Config;

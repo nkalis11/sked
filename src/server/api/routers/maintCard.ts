@@ -5,6 +5,8 @@ import { TRPCError } from "@trpc/server";
 import { clerkClient } from "@clerk/nextjs";
 import { filterUserForClient } from "../helpers/filterUserForClient";
 
+type PeriodicityCalendar = 'D' | 'W' | 'M' | 'Q' | 'S' | 'A';
+
 const prisma = new PrismaClient();
 {/* Assigns Clerk User To Maintenance Card*/}
 const addUserDataToMaint = async (maintCard: MaintenanceCard[]) => {
@@ -83,6 +85,7 @@ export const maintCardRouter = createTRPCRouter({
         periodicityCode: input.periodicityCode,
         Periodicity: input.Periodicity,
         assigneeId: input.assigneeId,
+        dueDate: new Date(),
       };
       const newCard = await ctx.prisma.maintenanceCard.create({
         data: inputData,
@@ -135,7 +138,7 @@ export const maintCardRouter = createTRPCRouter({
           dueDate: {
             gte: startDate,
             lt: endDate,
-          },
+          }, 
         },
         orderBy: {
           dueDate: "desc",
@@ -145,20 +148,102 @@ export const maintCardRouter = createTRPCRouter({
 
       return cards;
     }),
-  getMaintByUserId: publicProcedure //Router for getting all maintenance cards assigned to a user from Prisma
-    .input(
-      z.object({
-        userId: z.string(),
-      })
-    )
-    .query(({ ctx, input}) =>
-      ctx.prisma.maintenanceCard
-        .findMany({
-          where: {
-            assigneeId: input.userId,
-            },
-            take: 100,
-        })
-        .then(addUserDataToMaint)
-    ),
+    getMaintByCurrentUser: publicProcedure //Router for getting all maintenance cards for the current user from Prisma
+    .query(async ({ ctx }) => {
+      const userId = ctx.userId
+      if (!userId) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR", 
+          message: "User not found",
+        });
+      }
+      const maintCards = await ctx.prisma.maintenanceCard.findMany({
+        where: { assigneeId: userId },
+        orderBy: { dueDate: "asc" },
+      });
+      return await addUserDataToMaint(maintCards);
+    }),
+    completedMaintCard: publicProcedure //Router for marking a maintenance card as completed in Prisma
+    .input(z.object({
+      cardId: z.string(),
+    }))
+    .mutation(async ({ input, ctx }) => {
+      const userId = ctx.userId
+      if (!userId) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR", 
+          message: "User not found",
+        });
+      }
+      const card = await prisma.maintenanceCard.findUnique({
+        where: { id: input.cardId },
+      });
+      if (card?.assigneeId !== userId) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR", 
+          message: "User not found",
+        });
+      }
+
+      const periodicity = card.Periodicity;
+      const now = new Date();
+      const dueDate = getNextDueDate(now, periodicity);
+
+      const completeMaintenanceData = {
+        Title: card.Title,
+        Description: card.Description,
+        completedBy: userId,
+        completionDate: now,
+        completeOnTime: now <= card.dueDate,
+        checkNotes: "",
+        Periodicity: card.Periodicity,
+      }
+
+      await ctx.prisma.completedMaintenance.create({
+        data: completeMaintenanceData,
+      });
+
+      const completedMaintenance = await prisma.completedMaintenance.findMany();
+      console.log(completedMaintenance);
+
+      const updatedCard = await ctx.prisma.maintenanceCard.update({
+        where: { id: input.cardId },
+        data: {
+          assigneeId: null,
+          dueDate,
+          lastCompletedDate: now,
+        },
+      });
+      return updatedCard;
+    }),
 });  
+
+function getNextDueDate(now: Date, periodicity: PeriodicityCalendar): Date {
+  const nextDueDate = new Date(now);
+  switch (periodicity) {
+    case 'D': // Daily
+      nextDueDate.setDate(nextDueDate.getDate() + 1);
+      break;
+    case 'W': // Weekly
+      nextDueDate.setDate(nextDueDate.getDate() + 7);
+      break;
+    case 'M': // Monthly
+      nextDueDate.setMonth(nextDueDate.getMonth() + 1);
+      break;
+    case 'Q': // Quarterly
+      nextDueDate.setMonth(nextDueDate.getMonth() + 3);
+      break;
+    case 'S': // Semi-annually
+      nextDueDate.setMonth(nextDueDate.getMonth() + 6);
+      break;
+    case 'A': // Annually
+      nextDueDate.setFullYear(nextDueDate.getFullYear() + 1);
+      break;
+    default:
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR", 
+        message: "Invalid periodicity",
+      });
+  }
+  return nextDueDate;
+}

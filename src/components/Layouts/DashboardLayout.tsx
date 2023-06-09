@@ -11,8 +11,6 @@ type LayoutProps = {
   children: React.ReactNode;
 };
 
-
-
 function classNames(...classes: Array<string | boolean | undefined>) {
     return classes.filter(Boolean).join(' ')
 }
@@ -26,7 +24,7 @@ export default function DashboardLayout({ children }: LayoutProps) {
         <>
         <div>
           <Transition.Root show={sidebarOpen} as={Fragment}>
-            <Dialog as="div" className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
+            <Dialog as="div" className="relative z-50 xl:hidden" onClose={setSidebarOpen}>
               <Transition.Child
                 as={Fragment}
                 enter="transition-opacity ease-linear duration-300"
@@ -66,7 +64,7 @@ export default function DashboardLayout({ children }: LayoutProps) {
                       </div>
                     </Transition.Child>
                   {/* Sidebar component, swap this element with another sidebar if you like */}
-                    <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-600 px-6 pb-2">
+                    <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-slate-200 px-6 pb-2">
                       <div className="flex h-16 shrink-0 items-center">
                         <img
                           className="h-8 w-auto"
@@ -84,14 +82,14 @@ export default function DashboardLayout({ children }: LayoutProps) {
                                     href={item.href}
                                     className={classNames(
                                       item.current
-                                        ? 'bg-indigo-700 text-white'
-                                        : 'text-indigo-200 hover:text-white hover:bg-indigo-700',
+                                        ? 'bg-slate-800 text-white'
+                                        : 'text-slate-800 hover:text-white hover:bg-slate-800',
                                       'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                     )}
                                   >
                                     <item.icon
                                       className={classNames(
-                                        item.current ? 'text-white' : 'text-indigo-200 group-hover:text-white',
+                                        item.current ? 'text-white' : 'text-slate-800 group-hover:text-white',
                                         'h-6 w-6 shrink-0'
                                       )}
                                       aria-hidden="true"
@@ -113,11 +111,11 @@ export default function DashboardLayout({ children }: LayoutProps) {
           </Transition.Root>
 
         {/* Static sidebar for desktop */}
-        <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
+        <div className="hidden xl:fixed xl:inset-y-0 xl:z-50 xl:flex xl:w-64 xl:flex-col">
           {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-600 px-6">
-            <div className="flex h-16 shrink-0 items-center">
-              <UserButton />
+          <div className="flex grow r flex-col gap-y-5 overflow-y-auto bg-slate-200 px-6">
+            <div className="flex h-16 justify-center shrink-0 items-center border-b-2 border-slate-300">
+              <h1 className="text-2xl">SKED</h1>
             </div>
             <nav className="flex flex-1 flex-col">
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -129,14 +127,14 @@ export default function DashboardLayout({ children }: LayoutProps) {
                           href={item.href}
                           className={classNames(
                             item.current
-                              ? 'bg-indigo-700 text-white'
-                              : 'text-indigo-200 hover:text-white hover:bg-indigo-700',
+                              ? 'bg-slate-800 text-white'
+                              : 'text-slate-600 hover:text-white hover:bg-slate-800',
                             'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                           )}
                         >
                           <item.icon
                             className={classNames(
-                              item.current ? 'text-white' : 'text-indigo-200 group-hover:text-white',
+                              item.current ? 'text-white' : 'text-slate-600 group-hover:text-white',
                               'h-6 w-6 shrink-0'
                             )}
                             aria-hidden="true"
@@ -151,7 +149,7 @@ export default function DashboardLayout({ children }: LayoutProps) {
                 <li className="-mx-6 mt-auto">
                   <a
                     href="#"
-                    className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-indigo-700"
+                    className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-slate-800"
                   >
                     {!!user.isSignedIn && <UserButton />}
                     <span className="text-white mr-2">{user.user?.username}</span>
@@ -162,8 +160,8 @@ export default function DashboardLayout({ children }: LayoutProps) {
           </div>
         </div>
 
-        <div className="sticky top-0 z-40 flex items-center gap-x-6 bg-indigo-600 px-4 py-4 shadow-sm sm:px-6 lg:hidden">
-          <button type="button" className="-m-2.5 p-2.5 text-indigo-200 lg:hidden" onClick={() => setSidebarOpen(true)}>
+        <div className="sticky top-0 z-40 flex items-center gap-x-6 bg-slate-800 px-4 py-4 shadow-sm sm:px-6 xl:hidden">
+          <button type="button" className="-m-2.5 p-2.5 text-slate-100 xl:hidden" onClick={() => setSidebarOpen(true)}>
             <span className="sr-only">Open sidebar</span>
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
@@ -173,9 +171,12 @@ export default function DashboardLayout({ children }: LayoutProps) {
           </a>
         </div>
 
-        <main className="py-10 lg:pl-72 bg-slate-50 h-screen">
-          <div className="px-4 sm:px-6 lg:px-8">{children}</div>
-        </main>
+        <main className="bg-slate-300 h-screen px-4 py-4">
+          <div className="flex">
+            <div className="xl:w-60 h-screen"></div>
+          <div className="flex-1 xl:ml-4">{children}</div>
+        </div>
+      </main>
       </div>
         </>
     )

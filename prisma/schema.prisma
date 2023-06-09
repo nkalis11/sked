@@ -1,17 +1,11 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
-  
-}
-
 generator client {
   provider = "prisma-client-js"
 }
 
-
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
 model MaintenanceCard {
   id                   String              @id @default(cuid())
   Title                String
@@ -20,18 +14,52 @@ model MaintenanceCard {
   System               String
   Subsystem            String
   Equipment            String
-  periodicityFrequency Int?               
+  periodicityFrequency Int?
   periodicityCode      Int
   Periodicity          PeriodicityCalendar
   assigneeId           String?
-  dueDate              DateTime?
+  dueDate              DateTime
   lastCompletedDate    DateTime?
 
   @@index([assigneeId])
 }
+model CompletedMaintenance {
+  id                   String              @id @default(cuid())
+  Title                String
+  Description          String
+  completedBy          String
+  completionDate       DateTime
+  completeOnTime       Boolean
+  checkNotes           String?
+  Periodicity          PeriodicityCalendar
+}
+enum PeriodicityCalendar {
+  D
+  W
+  M
+  Q
+  S
+  A
+}
+
 model System {
-  id                 String              @id @default(cuid())
-  name               SystemName
+  id   String     @id @default(cuid())
+  name SystemName
+}
+
+model MaintenanceIndex {
+  id       Int    @id @default(autoincrement())
+  mipCode  String
+  SystemId String
+
+  @@index([SystemId])
+}
+
+model AccomplishmentRating {
+  id                   Int   @id @default(autoincrement())
+  situationalRating    Float
+  periodicRating       Float
+  administrativeRating Float
 }
 
 enum SystemName {
@@ -44,32 +72,5 @@ enum SystemName {
   Steering
   Electrical
 }
-
-enum PeriodicityCalendar {
-  D
-  W
-  M
-  Q
-  S
-  A
-}
-
-model MaintenanceIndex {
-  id                 Int                 @id @default(autoincrement())
-  SystemId           String
-  mipCode            String
-
-  @@index([SystemId])
-}
-
-model AccomplishmentRating {
-  id                 Int                 @id @default(autoincrement())
-  situationalRating  Float
-  periodicRating     Float
-  administrativeRating Float
-}
-
-
-
 
 
