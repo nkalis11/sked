@@ -1,13 +1,15 @@
 import { type NextPage } from "next";
 import WeeklyMaintenance from '~/components/Tables/WeeklyMaintenance'
-import { Grid } from '@tremor/react'
+import { Card, Grid } from '@tremor/react'
 import DashboardLayout from '~/components/Layouts/DashboardLayout'
 
 const Schedule: NextPage = () => {
     return (
         <DashboardLayout>
-            <Grid>
+            <Grid className="h-full">
+                <Card className="h-1/2">
                 <WeeklyMaintenance />
+                </Card>
             </Grid>
         </DashboardLayout>
     )

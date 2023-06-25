@@ -12,7 +12,7 @@ export const usePageLinks = () => {
     return [
         { name: 'My Tasks', href: '/dashboard/maintenance', icon: ClipboardIcon },
         { name: 'Quarterly Schedule', href: '/dashboard/schedule', icon: CalendarIcon },
-        { name: 'Testing', href: '/dashboard/testing', icon: UsersIcon}
+        { name: 'Maintenance Library', href: '/dashboard/library', icon: UsersIcon}
         
     ].map(link => ({
         ...link,

@@ -171,9 +171,9 @@ export default function DashboardLayout({ children }: LayoutProps) {
           </a>
         </div>
 
-        <main className="bg-slate-300 h-screen px-4 py-4">
+        <main className="bg-slate-300 px-4 py-4">
           <div id="goodContent" className="xl:flex">
-            <div className="xl:w-60 xl:h-screen"></div>
+            <div className="lg:w-60 xl:h-screen"></div>
             <div className="flex-1  xl:ml-4">{children}</div>
           </div>
         </main>

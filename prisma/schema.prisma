@@ -20,8 +20,10 @@ model MaintenanceCard {
   assigneeId           String?
   dueDate              DateTime
   lastCompletedDate    DateTime?
+  WorkcenterId         String?
 
   @@index([assigneeId])
+  @@index([WorkcenterId])
 }
 model CompletedMaintenance {
   id                   String              @id @default(cuid())
@@ -72,5 +74,3 @@ enum SystemName {
   Steering
   Electrical
 }
-
-

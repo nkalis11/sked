@@ -2,8 +2,6 @@ import React, { useState } from "react"
 import { api } from "~/utils/api"
 import WeekDropdown from "../Buttons/weekDropdown";
 import AssigneeButton from "../Buttons/updateAssignee";
-import { Card } from "@tremor/react";
-
 
 const useMaintenanceTable = () => {
     const [selectedWeek, setSelectedWeek] = useState<string>(() => {
@@ -13,7 +11,12 @@ const useMaintenanceTable = () => {
         const day = today.getDate().toString().padStart(2, '0');
         return `${year}-${month}-${day}`;
     });
-    const { data, error, isLoading } = api.maintenanceCard.getByWeek.useQuery({ startDate: selectedWeek });
+    const query = api.maintenanceCard.getByWeek.useQuery({ startDate: selectedWeek });
+    const { data, error, isLoading } = query;
+
+    const refreshData = () => {
+        query.refetch().catch((err) => console.error(err));
+    };
 
     const today = new Date();
     const currentQuarter = Math.floor((today.getMonth() / 3));
@@ -29,17 +32,18 @@ const useMaintenanceTable = () => {
         };
     });
 
-    return { selectedWeek, setSelectedWeek, weekOptions, data, error, isLoading };
+
+    return { selectedWeek, setSelectedWeek, weekOptions, data, error, isLoading, refreshData };
 };
 
 export default function WeeklyMaintenance() {
-    const { selectedWeek, setSelectedWeek, weekOptions, data, error } = useMaintenanceTable();
+    const { selectedWeek, setSelectedWeek, weekOptions, data, error, refreshData } = useMaintenanceTable();
 
     
     if (error) return <div>Error: {error.message}</div>;
 
     return (
-    <Card>
+   
         <div className="px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:items-center">
                 <div className="sm:flex-auto">
@@ -81,7 +85,7 @@ export default function WeeklyMaintenance() {
                                       <td className="hidden lg:table-cell whitespace-nowrap px-3 py-4 text-sm text-gray-500">{card.Description}</td>
                                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{card.dueDate ? card.dueDate.toISOString().split('T')[0] : 'No due date'}</td>
                                       <td>
-                                        <AssigneeButton card={card} />
+                                      <AssigneeButton card={card} onAssign={refreshData}/>
                                       </td>
                                   </tr>
                                 ))}
@@ -91,6 +95,5 @@ export default function WeeklyMaintenance() {
                 </div>
             </div>
         </div>
-    </Card>
     )
 }

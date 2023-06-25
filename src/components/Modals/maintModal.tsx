@@ -1,7 +1,6 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { MaintenanceCard } from "@prisma/client";
-import { set } from "zod";
+import type { MaintenanceCard } from "@prisma/client";
 
 type MaintModalProps = {
     card: MaintenanceCard;
@@ -12,12 +11,6 @@ type MaintModalProps = {
 export default function MaintModal({ card, onClose, open }: MaintModalProps) {
     const closeModal = () => {
         onClose(); // Call the onClose function passed from the parent component
-    };
-    const [isDeleted, setIsDeleted] = useState(false); 
-    const handleDeleteSuccess = () => {
-      setIsDeleted(true);
-      closeModal();
-      window.location.reload();
     };
 
     return (
@@ -53,11 +46,17 @@ export default function MaintModal({ card, onClose, open }: MaintModalProps) {
                         {card.Title}
                       </Dialog.Title>
                       <div className="mt-2">
-                        <h2>{card.periodicityCode}{card.Periodicity}-{card.periodicityFrequency}</h2>
+                        <h2>{card.periodicityCode}{card.Periodicity}{card.periodicityFrequency}</h2>
                         <p className="text-sm text-gray-500">
                           {card.Description}
                         </p>
-                      </div>
+                        <p className="text-sm text-gray-500">
+                          {card.System} - {card.Subsystem} - {card.Equipment}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          Due: {card.dueDate ? card.dueDate.toISOString().split('T')[0] : 'No due date'}
+                        </p>
+                      </div>  
                     </div>
                   </div>
                   <div className="mt-5 sm:mt-6">

@@ -4,16 +4,14 @@ import DashboardLayout from "~/components/Layouts/DashboardLayout";
 import UserMaintenance from "~/components/Tables/UserMaintenance";
 import PerRating from "~/components/Cards/perRating";
 import UserHeading from "~/components/Dashboard/userHeading";
+import MaintFeed from "~/components/Dashboard/maintFeed";
 
 const Dashboard: NextPage = () => {
 
     return (
       <DashboardLayout>
         <div className="min-h-full">
-          <header>
             <UserHeading />
-          </header>
-          <main>
               <Col className="my-4">
                 <Card>
                   <div className="h-full">
@@ -32,7 +30,13 @@ const Dashboard: NextPage = () => {
                   <PerRating /> 
                 </Col>
               </Grid>
-          </main>
+              <Col className="my-4">
+                <Card>
+                  <div className="h-full">
+                    <MaintFeed />
+                  </div>
+                </Card>
+              </Col>
         </div>
     </DashboardLayout>
   );

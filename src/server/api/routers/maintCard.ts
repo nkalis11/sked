@@ -5,7 +5,9 @@ import { TRPCError } from "@trpc/server";
 import { clerkClient } from "@clerk/nextjs";
 import { filterUserForClient } from "../helpers/filterUserForClient";
 
+
 type PeriodicityCalendar = 'D' | 'W' | 'M' | 'Q' | 'S' | 'A';
+
 
 const prisma = new PrismaClient();
 {/* Assigns Clerk User To Maintenance Card*/}
@@ -112,8 +114,7 @@ export const maintCardRouter = createTRPCRouter({
       if (!updatedCard)
         throw new TRPCError({ code: "NOT_FOUND", message: "Card not found" });  
       return updatedCard;
-      }),
-
+    }),
   getById: publicProcedure //Router for getting a maintenance card by its ID from Prisma
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
@@ -166,6 +167,7 @@ export const maintCardRouter = createTRPCRouter({
     completedMaintCard: publicProcedure //Router for marking a maintenance card as completed in Prisma
     .input(z.object({
       cardId: z.string(),
+      checkNotes: z.string().optional(),
     }))
     .mutation(async ({ input, ctx }) => {
       const userId = ctx.userId
@@ -195,7 +197,7 @@ export const maintCardRouter = createTRPCRouter({
         completedBy: userId,
         completionDate: now,
         completeOnTime: now <= card.dueDate,
-        checkNotes: "",
+        checkNotes: input.checkNotes || "",
         Periodicity: card.Periodicity,
       }
 
@@ -215,6 +217,27 @@ export const maintCardRouter = createTRPCRouter({
         },
       });
       return updatedCard;
+    }),
+    getCompletedMaintenance: publicProcedure.query(async ({ ctx }) => {
+      const completedMaintenance = await ctx.prisma.completedMaintenance.findMany({
+        take: 5,
+        orderBy: { completionDate: "desc" },
+      });
+
+      for (const record of completedMaintenance) {
+        let user;
+        try {
+          user = await clerkClient.users.getUser(record.completedBy);
+        } catch (err) {
+          console.log(err);
+        }
+        if (user) {
+          const userData = filterUserForClient(user);
+
+          record.completedBy = `${userData.firstName || ""} ${userData.lastName || ""}`;
+        }
+      }
+      return completedMaintenance;
     }),
 });  
 

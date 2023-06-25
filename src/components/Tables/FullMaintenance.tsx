@@ -1,4 +1,4 @@
-import { MaintenanceCard } from "@prisma/client";
+import type { MaintenanceCard } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { Listbox, Transition } from '@headlessui/react'
 import { ChevronUpDownIcon } from '@heroicons/react/20/solid'
@@ -12,7 +12,7 @@ function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
 
-export default function Testing() {
+export default function FullMaintenance() {
     const cardsQuery = api.maintenanceCard.getAll.useQuery();
     const usersQuery = api.maintenanceCard.getAllUsers.useQuery();
     const users = usersQuery.data || [];
@@ -106,6 +106,8 @@ export default function Testing() {
                                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">System</th>
                                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Subsystem</th>
                                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Equipment</th>
+                                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Due Date</th>
+                                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Last Completed</th>
                                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Assigned To:</th>
                                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Assign Clerk</th>
                                 </tr>
@@ -116,7 +118,9 @@ export default function Testing() {
                                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3 card-title-cell hover:text-blue-700 cursor-pointer" onClick={(event) => handleCardClick(card, event)}>{card.Title}</td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{card.System}</td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{card.Subsystem}</td>
+                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{card.Equipment}</td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{card.dueDate ? card.dueDate.toISOString().split('T')[0] : 'No due date'}</td>
+                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{card.lastCompletedDate  ? card.lastCompletedDate .toISOString().split('T')[0] : 'Never'}</td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                             { 
                                                 (() => {
