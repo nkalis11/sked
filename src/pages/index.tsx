@@ -1,8 +1,19 @@
 import { type NextPage } from "next";
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
+import { useUser } from "@clerk/nextjs";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
- 
+  const { user } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    // If the user is logged in, redirect them to the dashboard
+    if (user) {
+      void router.push('/dashboard/maintenance');
+    }
+  }, [user, router]);
 
   return (
     <>

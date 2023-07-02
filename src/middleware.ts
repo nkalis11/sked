@@ -10,21 +10,29 @@ const isPublic = (path: string) => { //Checks if the path is public
     path.match(new RegExp(`^${x}$`.replace('*$', '($|/)')))
   )
 }
+
 // Middleware to check if the user is signed in
 export default withClerkMiddleware((request: NextRequest) => {
-  if (isPublic(request.nextUrl.pathname)) {
-    return NextResponse.next()
-  }
-  // if the user is not signed in redirect them to the sign in page.
   const { userId } = getAuth(request)
 
+  if (isPublic(request.nextUrl.pathname)) {
+    if (userId) {
+      // If the user is signed in and visits a public path, redirect them to the dashboard
+      const dashboardUrl = new URL('/dashboard/maintenance', request.url)
+      return NextResponse.redirect(dashboardUrl.toString())
+    }
+    // If the user is not signed in, let them proceed
+    return NextResponse.next()
+  }
+
   if (!userId) {
-    // redirect the users to /pages/users/sign-in/[[...index]].ts
-    // and pass the current url as a query parameter
+    // If the user is not signed in and tries to access a non-public path, redirect them to the sign-in page.
     const signInUrl = new URL('/users/sign-in', request.url)
     signInUrl.searchParams.set('redirect_url', '/dashboard/maintenance') //Redirects to the maintenance page
-    return NextResponse.redirect(signInUrl)
+    return NextResponse.redirect(signInUrl.toString())
   }
+
+  // If the user is signed in and tries to access a non-public path, let them proceed
   return NextResponse.next()
 })
 
