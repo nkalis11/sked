@@ -1,5 +1,4 @@
 import { type NextPage } from "next";
-import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import { useUser } from "@clerk/nextjs";
 import { useEffect } from "react";
 import { useRouter } from "next/router";

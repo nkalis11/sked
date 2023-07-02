@@ -1,6 +1,6 @@
 # SKED Capstone Project
 
-This is a Capstone Project for CSCI 4911 @ Hawiia Pacific University, solely for educational purposes
+This is a Capstone Project for CSCI 4911 @ Hawaii Pacific University, solely for educational purposes
 
 ## Goals?
 
