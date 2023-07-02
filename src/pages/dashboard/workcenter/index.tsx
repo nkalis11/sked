@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import type { NextPage } from "next";
 import DashboardLayout from "~/components/Layouts/DashboardLayout";
 import { useOrganization, useOrganizationList } from "@clerk/nextjs";
 import { useState } from "react";
@@ -26,7 +26,6 @@ const Workcenter: NextPage = () => {
         setActive({ organization: org.id })
         .then(() => setSelectedOrg({ organization: org }))
         .catch((error) => {
-            // handle the error appropriately for your application
             console.error(error);
         });
     };
@@ -38,8 +37,8 @@ const Workcenter: NextPage = () => {
 
     return ( 
         <DashboardLayout>
-            <div id="workcenter-list" className="md:flex md:items-center md:justify-between bg-slate-500">
-                <div className="min-w-0 flex-1 gap-y-3 bg-slate-300">
+            <div id="workcenter-list" className="md:flex md:items-center md:justify-between ">
+                <div className="min-w-0 flex-1 gap-y-3 ">
                     <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
                     Workcenters
                     </h2>

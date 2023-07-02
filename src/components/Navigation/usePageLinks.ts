@@ -2,8 +2,9 @@
 import { useRouter } from 'next/router';
 import {
     ClipboardIcon,
-    UsersIcon,
     CalendarIcon,
+    BookOpenIcon,
+    UserGroupIcon,
 } from '@heroicons/react/24/outline'
 
 export const usePageLinks = () => {
@@ -12,7 +13,8 @@ export const usePageLinks = () => {
     return [
         { name: 'My Tasks', href: '/dashboard/maintenance', icon: ClipboardIcon },
         { name: 'Quarterly Schedule', href: '/dashboard/schedule', icon: CalendarIcon },
-        { name: 'Maintenance Library', href: '/dashboard/library', icon: UsersIcon}
+        { name: 'Maintenance Library', href: '/dashboard/library', icon: BookOpenIcon},
+        { name: 'Workcenters', href: '/dashboard/workcenter', icon: UserGroupIcon}
         
     ].map(link => ({
         ...link,
