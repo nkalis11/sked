@@ -46,10 +46,10 @@ export default function MaintModal({ card, onClose, open }: MaintModalProps) {
                         {card.Title}
                       </Dialog.Title>
                       <div className="mt-2">
-                        <h2>{card.periodicityCode}{card.Periodicity}{card.periodicityFrequency}</h2>
+                        <h2>{card.periodicityFrequency}{card.Periodicity}-{card.periodicityCode}</h2>
                         <p className="text-sm text-gray-500">
                           {card.Description}
-                        </p>
+                        </p>  
                         <p className="text-sm text-gray-500">
                           {card.System} - {card.Subsystem} - {card.Equipment}
                         </p>

@@ -3,11 +3,7 @@ import React, { useState } from "react"
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
 import MaintModal from "../Modals/maintModal";
 import MarkCompleteModal from "../Modals/markCompleteModal";
-import { MaintenanceCard } from "@prisma/client";
-
-function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(' ')
-}
+import type { MaintenanceCard } from "@prisma/client";
 
 export default function UserMaintenance () {
     const query = api.maintenanceCard.getMaintByCurrentUser.useQuery();
@@ -15,11 +11,6 @@ export default function UserMaintenance () {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isCompleteModalOpen, setIsCompleteModalOpen] = useState(false);
     const [selectedCard, setSelectedCard] = useState<MaintenanceCard | null>(null);
-    const completeMaintCard = api.maintenanceCard.completedMaintCard.useMutation({
-        onSettled: () => {
-            void query.refetch();
-        },
-    });
   
     const isPastDue = (dueDate: Date| undefined) => {
         if (!dueDate) {
@@ -29,14 +20,6 @@ export default function UserMaintenance () {
         return dueDate < today;
     };
 
-    const handleMarkComplete = async (cardId: string) => {
-        try {
-            const result = await completeMaintCard.mutateAsync({ cardId });
-            console.log('Maintenance card marked as complete:', result);
-        }   catch (error) {
-            console.error('Failed to mark maintenance card as complete:', error);
-        }
-    }
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -67,10 +50,10 @@ export default function UserMaintenance () {
                                     <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3">
                                         Title
                                     </th>
-                                    <th scope="col" className="hidden lg:table-cell px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                    <th scope="col" className="hidden 2xl:table-cell px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                         Description
                                     </th>
-                                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                    <th scope="col" className="hidden md:table-cell px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                         Due Date
                                     </th>
                                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
@@ -88,8 +71,8 @@ export default function UserMaintenance () {
                                             setIsModalOpen(true);
                                         }}
                                     >{card.card.Title}</td>
-                                    <td className="hidden lg:table-cell whitespace-nowrap px-3 py-4 text-sm text-gray-500">{card.card.Description}</td>
-                                    <td className={`px-3 py-3.5 whitespace-nowrap text-sm font-medium ${isPastDue(card.card.dueDate) ? 'text-red-500' : 'text-gray-900'}`}>
+                                    <td className="hidden 2xl:table-cell max-w-xl overflow-ellipsis overflow-hidden break-all whitespace-nowrap px-3 py-4 text-sm text-gray-500">{card.card.Description}</td>
+                                    <td className={`hidden md:table-cell px-3 py-3.5 whitespace-nowrap text-sm font-medium ${isPastDue(card.card.dueDate) ? 'text-red-500' : 'text-gray-900'}`}>
                                         {card.card.dueDate ? card.card.dueDate.toISOString().split('T')[0] : 'No due date'}
                                     </td>
                                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">

@@ -6,6 +6,7 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
 model MaintenanceCard {
   id                   String              @id @default(cuid())
   Title                String
@@ -25,23 +26,16 @@ model MaintenanceCard {
   @@index([assigneeId])
   @@index([WorkcenterId])
 }
+
 model CompletedMaintenance {
-  id                   String              @id @default(cuid())
-  Title                String
-  Description          String
-  completedBy          String
-  completionDate       DateTime
-  completeOnTime       Boolean
-  checkNotes           String?
-  Periodicity          PeriodicityCalendar
-}
-enum PeriodicityCalendar {
-  D
-  W
-  M
-  Q
-  S
-  A
+  id             String              @id @default(cuid())
+  Title          String
+  Description    String
+  completedBy    String
+  completionDate DateTime
+  completeOnTime Boolean
+  checkNotes     String?
+  Periodicity    PeriodicityCalendar
 }
 
 model System {
@@ -62,6 +56,20 @@ model AccomplishmentRating {
   situationalRating    Float
   periodicRating       Float
   administrativeRating Float
+}
+
+model Workcenter {
+  id   String @id
+  name String
+}
+
+enum PeriodicityCalendar {
+  D
+  W
+  M
+  Q
+  S
+  A
 }
 
 enum SystemName {

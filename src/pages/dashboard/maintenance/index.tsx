@@ -20,23 +20,18 @@ const Dashboard: NextPage = () => {
                 </Card>
               </Col>
               <Grid numCols={1} numColsSm={2} numColsLg={3} className="gap-4">
-                <Col>
-                  <PerRating /> 
-                </Col>
-                <Col>
-                  <PerRating /> 
+                <Col className="">
+                  <Card>
+                    <div className="h-full">
+                      <MaintFeed />
+                    </div>
+                  </Card>
                 </Col>
                 <Col>
                   <PerRating /> 
                 </Col>
               </Grid>
-              <Col className="my-4">
-                <Card>
-                  <div className="h-full">
-                    <MaintFeed />
-                  </div>
-                </Card>
-              </Col>
+              
         </div>
     </DashboardLayout>
   );

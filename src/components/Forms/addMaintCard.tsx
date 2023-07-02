@@ -1,10 +1,7 @@
-import { useState, Fragment } from "react";
+import { useState } from "react";
 import React from "react";
-import { Listbox, Transition } from '@headlessui/react'
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { api } from "~/utils/api";
-import { Prisma, PrismaClient } from "@prisma/client";
-import { ExclamationCircleIcon } from '@heroicons/react/20/solid'
+import { CheckCircleIcon } from '@heroicons/react/20/solid'
 
 type AddMaintCardProps = {
     onFormSubmitted: () => void;
@@ -30,10 +27,11 @@ export default function AddMaintCard({ onFormSubmitted }: AddMaintCardProps) {
     const [system, setSystem] = useState("");
     const [subsystem, setSubsystem] = useState("");
     const [equipment, setEquipment] = useState("");
-    const [periodicityFrequency, setPeriodicityFrequency] = useState<number>(0);
+    const [periodicityFrequency, setPeriodicityFrequency] = useState<number | null>(null);
     const [periodicityCode, setPeriodicityCode] = useState<number>(0);
     const [periodicity, setPeriodicity] = useState<PeriodicityCalendar>(() => PeriodicityCalendar.D); // Set the default value
     const [assigneeId, setAssigneeId] = useState("");
+    const [organizationId, setOrganizationId] = useState("");
 
     const addMaintCardMutation = api.maintenanceCard.addMaintCard.useMutation();
        
@@ -47,7 +45,7 @@ export default function AddMaintCard({ onFormSubmitted }: AddMaintCardProps) {
                 System: system,
                 Subsystem: subsystem,
                 Equipment: equipment,
-                periodicityFrequency: periodicityFrequency,
+                periodicityFrequency: periodicityFrequency === null ? undefined : periodicityFrequency,
                 periodicityCode: periodicityCode,
                 Periodicity: periodicity,
                 assigneeId: assigneeId,
@@ -63,157 +61,149 @@ export default function AddMaintCard({ onFormSubmitted }: AddMaintCardProps) {
     };
         
     return (
-        <div className="bg-blue-50">
-            <div className="mx-auto max-w-2xl px-4 pb-8 pt-8 sm:px-6 lg:max-w-7xl lg:px-8">
-                <h2 className="sr-only">Add Maintenance Card</h2>
-                <form 
-                    className="lg:grid lg:grid-cols-1 lg:gap-x-12 xl:gap-x-16" 
-                    onSubmit={onSubmit}
-                >
-                    <div className=""> 
-                        <div className="">
-                            <h2 className="text-lg font-medium text-gray-900">Detailed Information</h2>
-                            <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
-                                <div> 
-                                    <label className="block text-sm font-medium text-gray-700">
-                                        Title
-                                    </label>
-                                    <div className="mt-1">
-                                        <input 
-                                            type="text"
-                                            value={title}
-                                            onChange={(e) => setTitle(e.target.value)}
-                                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                        />
-                                    </div>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700">
-                                        Description
-                                    </label>
-                                    <div className="relative mt-1 rounded-md shadow-sm">
-                                        <input
-                                            type="text"
-                                            value={description}
-                                            onChange={(e) => setDescription(e.target.value)}
-                                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                        />
-                                    </div>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700">
-                                        Man Hours
-                                    </label>
-                                    <div className="relative mt-1 rounded-md shadow-sm">
-                                        <input
-                                            type="number"
-                                            step={0.1}
-                                            aria-invalid="true"
-                                            defaultValue={1.5}
-                                            value={manHours}
-                                            placeholder="1.5"
-                                            aria-describedby="man-hours-error"
-                                            onChange={(e) => setManHours(e.target.value)}
-                                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                        />
-                                        
-                                    </div>
-                                 
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700">
-                                        System
-                                    </label>
-                                    <div className="mt-1">
-                                        <input
-                                             type="text"
-                                             value={system}
-                                             onChange={(e) => setSystem(e.target.value)}
-                                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                        />
-                                    </div>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700">
-                                        Subsystem
-                                    </label>
-                                    <div className="mt-1">
-                                        <input
-                                            type="text"
-                                            value={subsystem}
-                                            onChange={(e) => setSubsystem(e.target.value)}
-                                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                        />
-                                    </div>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700">
-                                        Equipment
-                                    </label>
-                                    <div className="mt-1">
-                                        <input
-                                            type="text"
-                                            value={equipment}
-                                            onChange={(e) => setEquipment(e.target.value)}
-                                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                        />
-                                    </div>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700">
-                                        Frequency
-                                    </label>
-                                    <div className="mt-1">
-                                        <input
-                                            type="number"
-                                            value={periodicityFrequency}
-                                            onChange={(e) => setPeriodicityFrequency(parseInt(e.target.value))}
-                                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                        />
-                                    </div>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700">
-                                        Frequency Code
-                                    </label>
-                                    <div className="mt-1">
-                                        <input
-                                            type="number"
-                                            value={periodicityCode}
-                                            onChange={(e) => setPeriodicityCode(parseInt(e.target.value))}
-                                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                        />
-                                    </div>
-                                </div>
-                                <div> {/* This should be a dropdown*/}
-                                    <label className="block text-sm font-medium text-gray-700">
-                                        Periodicity
-                                    </label>
-                                    <div className="mt-1">
-                                        <select
-                                            value={periodicity}
-                                            onChange={(e) => setPeriodicity(e.target.value as PeriodicityCalendar)}
-                                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                        >
-                                            {Object.values(PeriodicityCalendar).map((value) => (
-                                            <option key={value} value={value}>
-                                                {value}
-                                            </option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                </div>
-                           
-                                
-                                
+        <div className="grid grid-cols-1 gap-x-8 gap-y-8 pt-10 md:grid-cols-3">
+            <form 
+                className="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2" 
+                onSubmit={onSubmit}
+            >
+                <div className="px-4 py-6 sm:p-8"> 
+                    <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+
+                        <div className="sm:col-span-full">
+                            <label className="block text-sm font-medium text-gray-700">
+                                Title
+                            </label>
+                            <div className="mt-2">
+                                <input 
+                                    type="text"
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    className="block w-full pl-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                />
                             </div>
                         </div>
-                        <div>
-                            <button>Submit</button>
+
+                        <div className="sm:col-span-3">
+                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                                System
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    type="text"
+                                    value={system}
+                                    onChange={(e) => setSystem(e.target.value)}
+                                    className="block w-full pl-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                />
+                            </div>
                         </div>
+
+                        <div className="sm:col-span-3">
+                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                                Subsystem
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    type="text"
+                                    value={subsystem}
+                                    onChange={(e) => setSubsystem(e.target.value)}
+                                    className="block pl-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="sm:col-span-3">
+                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                                Man Hours
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    type="number"
+                                    step={0.1}
+                                    aria-invalid="true"
+                                    defaultValue={1.5}
+                                    value={manHours}
+                                    placeholder="1.5"
+                                    aria-describedby="man-hours-error"
+                                    onChange={(e) => setManHours(e.target.value)}
+                                    className="block w-full pl-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="sm:col-span-3">
+                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                                Equipment
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    type="text"
+                                    value={equipment}
+                                    onChange={(e) => setEquipment(e.target.value)}
+                                    className="block w-full pl-1 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="sm:col-span-2">
+                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                                Frequency
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    type="number"
+                                    value={periodicityFrequency === null ? '' : periodicityFrequency}
+                                    onChange={(e) => setPeriodicityFrequency(e.target.value ? parseInt(e.target.value) : null)}
+                                    className="block w-full pl-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="sm:col-span-2">
+                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                                Frequency Code
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    type="number"
+                                    value={periodicityCode}
+                                    onChange={(e) => setPeriodicityCode(parseInt(e.target.value))}
+                                    className="block w-full pl-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="sm:col-span-2"> {/* This should be a dropdown*/}
+                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                                Periodicity
+                            </label>
+                            <div className="mt-2">
+                                <select
+                                    value={periodicity}
+                                    onChange={(e) => setPeriodicity(e.target.value as PeriodicityCalendar)}
+                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                >
+                                    {Object.values(PeriodicityCalendar).map((value) => (
+                                    <option key={value} value={value}>
+                                        {value}
+                                    </option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>   
                     </div>
-                </form>
-            </div>
+
+                  
+                    <button
+                        type="submit"
+                        className="inline-flex items-center gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    >
+                        <CheckCircleIcon className="-ml-0.5 h-5 w-5" aria-hidden="true" />
+                        Submit
+                        
+                    </button>
+
+                </div>
+            </form>
         </div>
     );
 }

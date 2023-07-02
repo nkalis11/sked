@@ -1,13 +1,12 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { MaintenanceCard, PrismaClient, Prisma } from "@prisma/client";
+import type { MaintenanceCard } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { clerkClient } from "@clerk/nextjs";
 import { filterUserForClient } from "../helpers/filterUserForClient";
 
-
 type PeriodicityCalendar = 'D' | 'W' | 'M' | 'Q' | 'S' | 'A';
-
 
 const prisma = new PrismaClient();
 {/* Assigns Clerk User To Maintenance Card*/}
@@ -51,6 +50,7 @@ const addUserDataToMaint = async (maintCard: MaintenanceCard[]) => {
   });
 };
 
+
 {/* Router for Maintenace Cards*/}
 export const maintCardRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => { //Finds all maintenance cards in Prisma
@@ -83,7 +83,7 @@ export const maintCardRouter = createTRPCRouter({
         System: input.System,
         Subsystem: input.Subsystem,
         Equipment: input.Equipment,
-        periodicityFrequency: input.periodicityFrequency,
+        periodicityFrequency: input.periodicityFrequency === null ? undefined : input.periodicityFrequency,
         periodicityCode: input.periodicityCode,
         Periodicity: input.Periodicity,
         assigneeId: input.assigneeId,

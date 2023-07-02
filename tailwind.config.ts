@@ -11,6 +11,9 @@ export default {
         'mono': ['Oswald'],
         'sans': ['Roboto', 'sans-serif'],
       },
+      caretColor: {
+        'red': '#f00',
+      },
     },
  
   },

@@ -146,13 +146,13 @@ export default function DashboardLayout({ children }: LayoutProps) {
                   </ul>
                 </li>
                 
-                <li className="-mx-6 mt-auto">
+                <li className="-mx-6 mt-auto bg-slate-300 hover:text-white">
                   <a
                     href="#"
-                    className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-slate-800"
+                    className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white"
                   >
                     {!!user.isSignedIn && <UserButton />}
-                    <span className="text-white mr-2">{user.user?.username}</span>
+                    <span className="text-slate-800  mr-2">{user.user?.firstName} {user.user?.lastName}</span>
                   </a>
                 </li>
               </ul>
@@ -171,7 +171,7 @@ export default function DashboardLayout({ children }: LayoutProps) {
           </a>
         </div>
 
-        <main className="bg-slate-300 px-4 py-4">
+        <main className="bg-slate-100 px-4 py-4">
           <div id="goodContent" className="xl:flex">
             <div className="lg:w-60 xl:h-screen"></div>
             <div className="flex-1  xl:ml-4">{children}</div>

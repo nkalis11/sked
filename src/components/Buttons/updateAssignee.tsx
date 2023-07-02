@@ -12,7 +12,7 @@ function classNames(...classes: (string | false)[]): string {
 interface AssigneeButtonProps {
         card: MaintenanceCard;
         onAssign?: () => void;
-    }
+}
 
 const AssigneeButton: React.FC<AssigneeButtonProps> = ({ card, onAssign }) => {
         const cardsQuery = api.maintenanceCard.getAll.useQuery();
